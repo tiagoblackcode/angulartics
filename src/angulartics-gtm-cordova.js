@@ -146,6 +146,9 @@
                         );
                     }
                 });
+
+                // Track the page we're on when the module loads
+                analytics.trackPage(success, failure, window.location.hash.slice(1));
             });
         }])
 
