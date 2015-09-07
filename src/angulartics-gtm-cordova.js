@@ -90,11 +90,61 @@
         .config(['$analyticsProvider', 'googleTagManagerCordovaProvider', function ($analyticsProvider, googleTagManagerCordovaProvider) {
             googleTagManagerCordovaProvider.ready(function (analytics, success, failure) {
                 $analyticsProvider.registerPageTrack(function (path) {
-                    analytics.trackPage(success, failure, path);
+                    var username = googleTagManagerCordovaProvider.username;
+
+                    if (username) {
+                        analytics.trackPage(success, failure, path, username);
+                    } else {
+                        analytics.trackPage(success, failure, path);
+                    }
                 });
 
                 $analyticsProvider.registerEventTrack(function (action, properties) {
-                    analytics.trackEvent(success, failure, properties.category, action, properties.label, properties.value);
+                    var username = googleTagManagerCordovaProvider.username;
+
+                    if (username) {
+                        analytics.trackEvent(
+                            success, failure, properties.category, action,
+                            properties.label, properties.value, username
+                        );
+                    } else {
+                        analytics.trackEvent(
+                            success, failure, properties.category, action,
+                            properties.label, properties.value
+                        );
+                    }
+                });
+
+                $analyticsProvider.registerExceptionTrack(function(description, properties) {
+                    var username = googleTagManagerCordovaProvider.username;
+
+                    if (username) {
+                        analytics.trackException(
+                            success, failure, description,
+                            properties.isFatal, username
+                        );
+                    } else {
+                        analytics.trackException(
+                            succes, failure, description,
+                            properties.isFatal
+                        );
+                    }
+                });
+
+                $analyticsProvider.registerTimingTrack(function(category, properties) {
+                    var username = googleTagManagerCordovaProvider.username;
+
+                    if (username) {
+                        analytics.trackException(
+                            success, failure, category, properties.name,
+                            properties.label, properties.value, username
+                        );
+                    } else {
+                        analytics.trackTiming(
+                            success, failure, category, properties.name,
+                            properties.label, properties.value
+                        );
+                    }
                 });
             });
         }])
